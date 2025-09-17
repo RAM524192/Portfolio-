@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAJESH RAM | Data Science Specialist & Full Stack Developer</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lottie Animations -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        :root {
+            --primary: #18a3ad;
+            --secondary: #ff00f0;
+            --accent: #f0ff00;
+            --dark: #0a0a20;
+            --darker: #050510;
+            --light: #f0f0ff;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+        
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            font-weight: 400;
+        }
+        
+        h1, h2, h3, h4, .nav-link, .btn {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+        
+        /* Cyberpunk Background Animation */
+        #cyberpunk-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+        
+        /* Grid Overlay */
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                linear-gradient(rgba(10, 10, 32, 0.8) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10, 10, 32, 0.8) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: -1;
+            opacity: 0.3;
+        }
+        
+        /* AI Assistant */
+        #ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 1000;
+            box-shadow: 0 0 20px var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        #ai-assistant:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px var(--primary);
+        }
+        
+        #ai-assistant-icon {
+            font-size: 2rem;
+            color: var(--dark);
+        }
+        
+        #ai-chat-container {
+            position: fixed;
+            bottom: 120px;
+            right: 30px;
+            width: 350px;
+            max-height: 500px;
+            background: rgba(5, 5, 16, 0.95);
+            border-radius: 15px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            z-index: 1000;
+            overflow: hidden;
+            transform: scale(0);
+            transform-origin: bottom right;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #ai-chat-container.active {
+            transform: scale(1);
+        }
+        
+        #ai-chat-header {
+            padding: 15px;
+            background: rgba(0, 240, 255, 0.1);
+            border-bottom: 1px solid var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        #ai-chat-body {
+            padding: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary) transparent;
+        }
+        
+        #ai-chat-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #ai-chat-body::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        #ai-chat-body::-webkit-scrollbar-thumb {
+            background-color: var(--primary);
+            border-radius: 3px;
+        }
+        
+        .ai-message {
+            background: rgba(0, 240, 255, 0.1);
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 3px solid var(--primary);
+            animation: fadeIn 0.3s ease;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        
+        .ai-message.user {
+            margin-left: auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-left: none;
+            border-right: 3px solid var(--accent);
+            text-align: right;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #ai-chat-input-container {
+            padding: 15px;
+            border-top: 1px solid var(--primary);
+            background: rgba(5, 5, 16, 0.9);
+        }
+        
+        #ai-user-input {
+            width: 100%;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 5px;
+            color: var(--light);
+            outline: none;
+            transition: all 0.3s ease;
+        }
+        
+        #ai-user-input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 10px rgba(240, 255, 0, 0.3);
+        }
+        
+        /* Cinematic Opening */
+        #hero {
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(10, 10, 50, 0.8) 0%, var(--darker) 70%);
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 3;
+            text-align: center;
+        }
+        
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.4;
+            mix-blend-mode: screen;
+        }
+        
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -200px;
+            left: -200px;
+            animation: float 15s infinite ease-in-out;
+        }
+        
+        .orb-2 {
+            width: 500px;
+            height: 500px;
+            background: var(--secondary);
+            bottom: -250px;
+            right: -250px;
+            animation: float 18s infinite ease-in-out reverse;
+        }
+        
+        .orb-3 {
+            width: 300px;
+            height: 300px;
+            background: var(--accent);
+            top: 50%;
+            left: 70%;
+            animation: float 12s infinite ease-in-out 2s;
+        }
+        
+        @keyframes float {
+            0%, 100% {
+                transform: translate(0, 0);
+            }
+            50% {
+                transform: translate(50px, 50px);
+            }
+        }
+        
+        /* Robotic Arm Animation Container */
+        .robot-arm-container {
+            position: absolute;
+            bottom: 0;
+            right: 5%;
+            width: 400px;
+            height: 400px;
+            z-index: 2;
+            opacity: 0.7;
+        }
+        
+        /* Text Effects */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.7);
+        }
+        
+        .neon-text {
+            color: var(--primary);
+            text-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary), 0 0 20px var(--primary);
+        }
+        
+        .neon-border {
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 10px var(--primary), inset 0 0 10px var(--primary);
+        }
+        
+        .neon-accent {
+            border: 1px solid var(--accent);
+            box-shadow: 0 0 10px var(--accent), inset 0 0 10px var(--accent);
+        }
+        
+        /* Navigation */
+        .navbar {
+            background-color: rgba(10, 10, 32, 0.5);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 240, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.scrolled {
+            background-color: rgba(5, 5, 16, 0.95);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .nav-link {
+            color: var(--light);
+            margin: 0 15px;
+            position: relative;
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+        
+        .nav-link:hover {
+            color: var(--primary);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        /* Sections */
+        section {
+            padding: 120px 0;
+            position: relative;
+        }
+        
+        .section-title {
+            margin-bottom: 70px;
+            position: relative;
+            display: inline-block;
+            text-transform: uppercase;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -15px;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+            animation: pulseWidth 2s infinite;
+        }
+        
+        @keyframes pulseWidth {
+            0%, 100% {
+                width: 60px;
+            }
+            50% {
+                width: 100px;
+            }
+        }
+        
+        /* Glassmorphism Cards */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, transparent 100%);
+            z-index: -1;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+        
+        /* Download Cards */
+        .download-card {
+            transition: all 0.3s ease;
+            height: 100%;
+        }
+        
+        .download-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 240, 255, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.5);
+        }
+        
+        .download-icon {
+            transition: all 0.3s ease;
+        }
+        
+        .download-card:hover .download-icon {
+            transform: scale(1.1);
+        }
+        
+        /* Profile Photo */
+        .profile-photo {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            border-radius: 15px;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.3);
+            transition: all 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .profile-photo::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.1) 0%, transparent 100%);
+            z-index: 1;
+        }
+        
+        .profile-photo:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 50px rgba(0, 240, 255, 0.5);
+        }
+        
+        .profile-photo-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        .profile-photo-container::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            transform: rotate(5deg);
+            z-index: -1;
+            animation: rotateBorder 8s infinite linear;
+        }
+        
+        @keyframes rotateBorder {
+            0% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
+        
+        /* Strengths Section */
+        .strength-card {
+            height: 100%;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .strength-icon {
+            font-size: 3rem;
+            margin-bottom: 25px;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .strength-card:hover .strength-icon {
+            transform: scale(1.2);
+            color: var(--accent);
+        }
+        
+        /* Projects Section */
+        .project-card {
+            height: 350px;
+            position: relative;
+            overflow: hidden;
+            border-radius: 15px;
+        }
+        
+        .project-img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            transition: all 0.5s ease;
+        }
+        
+        .project-overlay {
+            position: absolute;
+            bottom: -100%;
+            left: 0;
+            width: 100%;
+            padding: 25px;
+            background: rgba(5, 5, 16, 0.9);
+            backdrop-filter: blur(5px);
+            transition: bottom 0.4s ease;
+            border-top: 1px solid var(--primary);
+        }
+        
+        .project-card:hover .project-overlay {
+            bottom: 0;
+        }
+        
+        .project-card:hover .project-img {
+            transform: scale(1.1);
+            opacity: 0.2;
+        }
+        
+        .tech-badge {
+            display: inline-block;
+            padding: 5px 15px;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid var(--primary);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 50px;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20px;
+            height: 100%;
+            width: 2px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 50px;
+            padding-left: 30px;
+        }
+        
+        .timeline-dot {
+            position: absolute;
+            left: 10px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--dark);
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+        
+        .timeline-content {
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Tokenomics */
+        .token-card {
+            text-align: center;
+            padding: 30px 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .token-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+            transition: all 0.5s ease;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .token-card:hover::before {
+            opacity: 1;
+            animation: tokenGlow 2s infinite;
+        }
+        
+        @keyframes tokenGlow {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 0.8;
+            }
+        }
+        
+        .token-icon {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .token-card:hover .token-icon {
+            transform: rotateY(180deg);
+            color: var(--accent);
+        }
+        
+        .token-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 15px 0;
+            text-transform: uppercase;
+        }
+        
+        /* Roadmap */
+        .roadmap-item {
+            position: relative;
+            padding-left: 60px;
+            margin-bottom: 50px;
+        }
+        
+        .roadmap-year {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: var(--dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 0 15px var(--primary);
+        }
+        
+        .roadmap-content {
+            padding: 25px;
+            border-radius: 10px;
+            border-left: 3px solid var(--primary);
+            background: var(--glass);
+            backdrop-filter: blur(5px);
+        }
+        
+        /* Contact */
+        .contact-form .form-control {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            color: var(--light);
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+        
+        .contact-form .form-control:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
+            color: var(--light);
+        }
+        
+        .contact-form textarea.form-control {
+            min-height: 150px;
+        }
+        
+        /* Buttons */
+        .btn-primary {
+            background: var(--primary);
+            color: var(--dark);
+            border: none;
+            font-weight: bold;
+            padding: 12px 30px;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: all 0.5s ease;
+            z-index: -1;
+        }
+        
+        .btn-primary:hover::before {
+            left: 100%;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+        }
+        
+        .btn-outline-light {
+            border: 2px solid var(--light);
+            color: var(--light);
+            font-weight: bold;
+            padding: 12px 30px;
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline-light:hover {
+            color: var(--dark);
+            background: var(--light);
+            box-shadow: 0 0 20px rgba(240, 240, 255, 0.5);
+        }
+        
+        /* Animations */
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.7;
+                transform: scale(1.05);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Floating Animation */
+        @keyframes floating {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+        
+        .floating {
+            animation: floating 6s ease-in-out infinite;
+        }
+        
+        /* Responsive */
+        @media (max-width: 992px) {
+            .robot-arm-container {
+                width: 300px;
+                height: 300px;
+                right: -50px;
+                opacity: 0.5;
+            }
+            
+            .profile-photo {
+                max-width: 350px;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            section {
+                padding: 80px 0;
+            }
+            
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+            
+            .hero-content p {
+                font-size: 1.2rem;
+            }
+            
+            .robot-arm-container {
+                display: none;
+            }
+            
+            .section-title {
+                margin-bottom: 50px;
+            }
+            
+            #ai-chat-container {
+                width: 300px;
+                right: 20px;
+            }
+            
+            .profile-photo {
+                max-width: 300px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .hero-content h1 {
+                font-size: 2.2rem;
+            }
+            
+            .btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            #ai-assistant {
+                width: 60px;
+                height: 60px;
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            #ai-assistant-icon {
+                font-size: 1.5rem;
+            }
+            
+            #ai-chat-container {
+                width: 280px;
+                right: 10px;
+                bottom: 90px;
+            }
+            
+            .profile-photo {
+                max-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body data-bs-spy="scroll" data-bs-target=".navbar">
+    <!-- Cyberpunk Background Animation -->
+    <div id="cyberpunk-bg">
+        <lottie-player src="https://assets10.lottiefiles.com/packages/lf20_obhph3sh.json" background="transparent" speed="0.5" loop autoplay></lottie-player>
+    </div>
+    
+    <!-- Grid Overlay -->
+    <div class="grid-overlay"></div>
+    
+    <!-- AI Assistant -->
+    <div id="ai-assistant">
+        <i id="ai-assistant-icon" class="fas fa-robot"></i>
+    </div>
+    
+    <div id="ai-chat-container">
+        <div id="ai-chat-header">
+            <h5 class="mb-0">RAJESH AI ASSISTANT</h5>
+            <button id="ai-close-chat" class="btn btn-sm btn-link text-light"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="ai-chat-body">
+            <div class="ai-message">
+                <p>Hello! I'm Rajesh's AI assistant. How can I help you explore this portfolio?</p>
+            </div>
+        </div>
+        <div id="ai-chat-input-container">
+            <input type="text" placeholder="Type your question..." id="ai-user-input">
+        </div>
+    </div>
+
+    <!-- Cinematic Opening -->
+    <section id="hero" class="d-flex align-items-center">
+        <div class="hero-bg">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+        
+        <!-- Robotic Arm Animation -->
+        <div class="robot-arm-container">
+            <lottie-player src="https://assets2.lottiefiles.com/packages/lf20_5tkzkblw.json" background="transparent" speed="0.8" loop autoplay></lottie-player>
+        </div>
+        
+        <div class="container hero-content text-center">
+            <h1 class="display-3 mb-4 neon-text">RAJESH RAM</h1>
+            <p class="lead mb-5" style="font-size: 1.8rem; font-weight: 300;">COMPUTER SCIENCE GRADUATE | <span class="neon-text">DATA SCIENCE</span> SPECIALIST | <span class="neon-text">FULL STACK DEVELOPER</span></p>
+            <div class="d-flex justify-content-center gap-4">
+                <a href="#projects" class="btn btn-primary px-5" data-ai-trigger="projects">VIEW PROJECTS</a>
+                <a href="#contact" class="btn btn-outline-light px-5" data-ai-trigger="contact">CONTACT ME</a>
+            </div>
+        </div>
+        <a href="#about" class="position-absolute bottom-0 start-50 translate-middle-x mb-5 text-white" style="font-size: 2.5rem;">
+            <i class="fas fa-chevron-down pulse"></i>
+        </a>
+    </section>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand neon-text" href="#">RAJESH RAM</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about">ABOUT</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#skills">SKILLS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#projects">PROJECTS</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#education">EDUCATION</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#experience">EXPERIENCE</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact">CONTACT</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- About Section -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">PROFESSIONAL PROFILE</h2>
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="profile-photo-container text-center">
+                        <img src="pf2.jpg" alt="Rajesh Ram" class="profile-photo floating">
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="glass-card p-5">
+                        <h3 class="mb-4">DATA-DRIVEN SOLUTIONS ARCHITECT</h3>
+                        <p class="mb-4">Detail-oriented Computer Science graduate with specialization in Data Science. Strong foundation in programming, data-driven solutions, and machine learning. Proven ability to develop full-stack applications and implement data science solutions.</p>
+                        <p class="mb-4">Ranked among the top 25% of my batch at Brainware University, I combine technical expertise with practical problem-solving skills to create impactful digital solutions.</p>
+                        <div class="d-flex flex-wrap gap-3 mt-4">
+                            <a href="#skills" class="btn btn-primary" data-ai-trigger="skills">TECHNICAL SKILLS</a>
+                            <a href="#projects" class="btn btn-outline-light" data-ai-trigger="projects">MY WORK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="py-5 bg-dark">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">TECHNICAL EXPERTISE</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="glass-card strength-card" data-ai-trigger="programming">
+                        <div class="strength-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>PROGRAMMING LANGUAGES</h3>
+                        <p>Python, Java, C++, JavaScript</p>
+                        <div class="mt-3">
+                            <span class="tech-badge">Python (Basics)</span>
+                            <span class="tech-badge">Java (Moderate)</span>
+                            <span class="tech-badge">C++ (Basics)</span>
+                            <span class="tech-badge">JavaScript</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card strength-card" data-ai-trigger="webdev">
+                        <div class="strength-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>WEB DEVELOPMENT</h3>
+                        <p>Frontend and Backend technologies</p>
+                        <div class="mt-3">
+                            <span class="tech-badge">HTML5</span>
+                            <span class="tech-badge">CSS3</span>
+                            <span class="tech-badge">Bootstrap</span>
+                            <span class="tech-badge">React.js (Basics)</span>
+                            <span class="tech-badge">Node.js</span>
+                            <span class="tech-badge">Express.js (Basics)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card strength-card" data-ai-trigger="datascience">
+                        <div class="strength-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>DATA SCIENCE</h3>
+                        <p>Data analysis and machine learning</p>
+                        <div class="mt-3">
+                            <span class="tech-badge">NumPy</span>
+                            <span class="tech-badge">Matplotlib</span>
+                            <span class="tech-badge">scikit-learn</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card strength-card" data-ai-trigger="databases">
+                        <div class="strength-icon">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3>DATABASES</h3>
+                        <p>Structured and unstructured data storage</p>
+                        <div class="mt-3">
+                            <span class="tech-badge">MySQL</span>
+                            <span class="tech-badge">MongoDB</span>
+                            <span class="tech-badge">Firebase</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card strength-card" data-ai-trigger="tools">
+                        <div class="strength-icon">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h3>DEVELOPMENT TOOLS</h3>
+                        <p>Software and platforms I work with</p>
+                        <div class="mt-3">
+                            <span class="tech-badge">VS Code</span>
+                            <span class="tech-badge">Jupyter Notebook</span>
+                            <span class="tech-badge">Figma (Basics)</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="glass-card strength-card" data-ai-trigger="softskills">
+                        <div class="strength-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>SOFT SKILLS</h3>
+                        <p>Professional strengths beyond coding</p>
+                        <div class="mt-3">
+                            <span class="tech-badge">Problem Solving</span>
+                            <span class="tech-badge">Team Collaboration</span>
+                            <span class="tech-badge">Adaptability</span>
+                            <span class="tech-badge">Leadership</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">PROJECT SHOWCASE</h2>
+            <div class="row g-4">
+                <div class="col-md-6 col-lg-4">
+                    <div class="project-card glass-card" data-ai-trigger="ecommerce">
+                        <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" class="project-img" alt="E-Commerce Website">
+                        <div class="project-overlay">
+                            <h3>E-Commerce Website</h3>
+                            <p>Developed responsive e-commerce platform with product filtering functionality and intuitive UI/UX design principles.</p>
+                            <div class="mb-4">
+                                <span class="tech-badge">HTML5</span>
+                                <span class="tech-badge">JavaScript</span>
+                                <span class="tech-badge">Bootstrap</span>
+                            </div>
+                            <a href="#" class="btn btn-sm btn-primary">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="project-card glass-card" data-ai-trigger="weatherapp">
+                        <img src="https://images.unsplash.com/photo-1601134467661-3d775b999c8b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1975&q=80" class="project-img" alt="Weather Application">
+                        <div class="project-overlay">
+                            <h3>Weather Application</h3>
+                            <p>Built real-time weather data application using Open Weather API with clean interface and dynamic data visualization.</p>
+                            <div class="mb-4">
+                                <span class="tech-badge">JavaScript</span>
+                                <span class="tech-badge">API Integration</span>
+                                <span class="tech-badge">CSS3</span>
+                            </div>
+                            <a href="#" class="btn btn-sm btn-primary">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-lg-4">
+                    <div class="project-card glass-card" data-ai-trigger="miniprojects">
+                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" class="project-img" alt="Mini Projects">
+                        <div class="project-overlay">
+                            <h3>20+ Mini Projects</h3>
+                            <p>Completed over 20 mini projects demonstrating problem-solving skills across various domains.</p>
+                            <div class="mb-4">
+                                <span class="tech-badge">Python</span>
+                                <span class="tech-badge">JavaScript</span>
+                                <span class="tech-badge">HTML/CSS</span>
+                            </div>
+                            <a href="#" class="btn btn-sm btn-primary">VIEW DETAILS</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-5">
+                <a href="https://github.com/RAM524192" class="btn btn-primary btn-lg px-5" target="_blank">VIEW ALL PROJECTS</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="py-5 bg-dark">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">EDUCATION & CERTIFICATIONS</h2>
+            <div class="timeline">
+                <div class="timeline-item" data-ai-trigger="btech">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h4>Bachelor of Technology in Computer Science & Engineering (Data Science Specialization)</h4>
+                        <p class="text-muted">Brainware University | 2022 - 2026</p>
+                        <ul>
+                            <li>Ranked among top 25% of the batch</li>
+                            <li>Key Coursework: Data Science, Machine Learning, Web Technologies, Data Structures & Algorithms, Database Management Systems</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item" data-ai-trigger="cert1">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h4>The Complete Web Development Bootcamp</h4>
+                        <p class="text-muted">Udemy | 2024</p>
+                        <p>Comprehensive training in full-stack web development technologies</p>
+                    </div>
+                </div>
+                <div class="timeline-item" data-ai-trigger="cert2">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h4>Frontend Web Development with React</h4>
+                        <p class="text-muted">Coursera | 2025</p>
+                        <p>Specialized training in React.js framework for modern web applications</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experience Section -->
+    <section id="experience" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">PROFESSIONAL EXPERIENCE</h2>
+            <div class="timeline">
+                <div class="timeline-item" data-ai-trigger="iccret">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h4>ICCRET Volunteer</h4>
+                        <p class="text-muted">Dates not specified</p>
+                        <ul>
+                            <li>Organized and managed international conference on research engineering</li>
+                            <li>Led team of 10+ volunteers in coordinating event logistics</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="timeline-item" data-ai-trigger="exhibition">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content glass-card">
+                        <h4>Technical Exhibition Coordinator</h4>
+                        <p class="text-muted">Dates not specified</p>
+                        <ul>
+                            <li>Spearheaded college technical exhibition with 15+ project displays</li>
+                            <li>Managed team of volunteers and exhibition operations</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Additional Information Section -->
+    <section id="additional" class="py-5 bg-dark">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">ADDITIONAL INFORMATION</h2>
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="glass-card p-4 h-100">
+                        <h3 class="mb-3">LANGUAGES</h3>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-check text-primary me-2"></i> English</li>
+                            <li><i class="fas fa-check text-primary me-2"></i> Hindi</li>
+                            <li><i class="fas fa-check text-primary me-2"></i> Bengali</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-4">
+                    <div class="glass-card p-4 h-100">
+                        <h3 class="mb-3">HOBBIES & INTERESTS</h3>
+                        <ul class="list-unstyled">
+                            <li><i class="fas fa-code text-primary me-2"></i> Contributing to open source projects</li>
+                            <li><i class="fas fa-laptop-code text-primary me-2"></i> Building side projects</li>
+                            <li><i class="fas fa-book text-primary me-2"></i> Learning new technologies</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Links Section -->
+    <section id="portfolio" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">PORTFOLIO & PROFILES</h2>
+            <div class="row g-4">
+                <!-- LinkedIn Profile -->
+                <div class="col-md-6">
+                    <a href="https://www.linkedin.com/in/rajesh-ram-261047375" target="_blank" class="glass-card download-card d-block p-4 text-center text-decoration-none">
+                        <div class="download-icon mb-3">
+                            <i class="fab fa-linkedin fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="mb-2">LinkedIn Profile</h4>
+                        <p class="text-muted small mb-3">Professional Network</p>
+                        <div class="mt-2">
+                            <span class="tech-badge">Connect</span>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-primary"><i class="fas fa-external-link-alt me-1"></i> View Profile</small>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- GitHub Profile -->
+                <div class="col-md-6">
+                    <a href="https://github.com/RAM524192" target="_blank" class="glass-card download-card d-block p-4 text-center text-decoration-none">
+                        <div class="download-icon mb-3">
+                            <i class="fab fa-github fa-3x text-light"></i>
+                        </div>
+                        <h4 class="mb-2">GitHub Profile</h4>
+                        <p class="text-muted small mb-3">Code Repository</p>
+                        <div class="mt-2">
+                            <span class="tech-badge">Explore</span>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-primary"><i class="fas fa-external-link-alt me-1"></i> View Projects</small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Resume Download Section -->
+    <section id="resume-download" class="py-5 bg-dark">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">DOWNLOAD RESUME</h2>
+            <div class="row g-4">
+                <!-- PDF Version -->
+                <div class="col-md-4">
+                    <a href="Rajesh Ram_BWUBTD22337_resume-1.pdf" class="glass-card download-card d-block p-4 text-center text-decoration-none" download>
+                        <div class="download-icon mb-3">
+                            <i class="fas fa-file-pdf fa-3x text-danger"></i>
+                        </div>
+                        <h4 class="mb-2">PDF Version</h4>
+                        <p class="text-muted small mb-3">Standard Professional Format</p>
+                        <div class="mt-2">
+                            <span class="tech-badge">2.4 MB</span>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-primary"><i class="fas fa-download me-1"></i> Recommended for ATS</small>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- DOCX Version -->
+                <div class="col-md-4">
+                    <a href="rajesh- resume-docfile.docx" class="glass-card download-card d-block p-4 text-center text-decoration-none" download>
+                        <div class="download-icon mb-3">
+                            <i class="fas fa-file-word fa-3x text-primary"></i>
+                        </div>
+                        <h4 class="mb-2">Editable DOCX</h4>
+                        <p class="text-muted small mb-3">MS Word Format</p>
+                        <div class="mt-2">
+                            <span class="tech-badge">3.1 MB</span>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-primary"><i class="fas fa-edit me-1"></i> Editable Version</small>
+                        </div>
+                    </a>
+                </div>
+                
+                <!-- TXT Version -->
+                <div class="col-md-4">
+                    <a href="portfolio/Rajesh Ram_BWUBTD22337_resume_text.txt" class="glass-card download-card d-block p-4 text-center text-decoration-none" download>
+                        <div class="download-icon mb-3">
+                            <i class="fas fa-file-alt fa-3x text-info"></i>
+                        </div>
+                        <h4 class="mb-2">Plain Text</h4>
+                        <p class="text-muted small mb-3">Simple Text Format</p>
+                        <div class="mt-2">
+                            <span class="tech-badge">1.2 MB</span>
+                        </div>
+                        <div class="mt-3">
+                            <small class="text-primary"><i class="fas fa-font me-1"></i> Clean Formatting</small>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5">
+                <div class="glass-card p-4">
+                    <h4 class="mb-3">Need a Different Format?</h4>
+                    <p class="mb-3">Contact me directly and I'll provide the resume in your preferred format.</p>
+                    <a href="#contact" class="btn btn-primary">
+                        <i class="fas fa-envelope me-2"></i> Request Custom Format
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">GET IN TOUCH</h2>
+            <div class="row">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="glass-card p-5 h-100">
+                        <h3 class="mb-4">CONTACT INFORMATION</h3>
+                        <p class="mb-4">I'm open to new opportunities and collaborations. Feel free to reach out!</p>
+                        <div class="mt-4">
+                            <a href="mailto:ram768154@gmail.com" class="d-block mb-3 text-white">
+                                <i class="fas fa-envelope me-2"></i> ram768154@gmail.com
+                            </a>
+                            <a href="tel:+916290524192" class="d-block mb-3 text-white">
+                                <i class="fas fa-phone me-2"></i> +91-6290524192
+                            </a>
+                            <div class="d-flex gap-3 mt-4">
+                                <a href="https://www.linkedin.com/in/rajesh-ram-261047375" target="_blank" class="text-white"><i class="fab fa-linkedin fa-2x"></i></a>
+                                <a href="https://github.com/RAM524192" target="_blank" class="text-white"><i class="fab fa-github fa-2x"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="glass-card p-5 h-100">
+                        <form class="contact-form">
+                            <div class="mb-4">
+                                <input type="text" class="form-control" placeholder="Your Name" required>
+                            </div>
+                            <div class="mb-4">
+                                <input type="email" class="form-control" placeholder="Your Email" required>
+                            </div>
+                            <div class="mb-4">
+                                <input type="text" class="form-control" placeholder="Subject">
+                            </div>
+                            <div class="mb-4">
+                                <textarea class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary w-100">SEND MESSAGE</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 text-center bg-dark">
+        <div class="container">
+            <div class="mb-4">
+                <a href="https://www.linkedin.com/in/rajesh-ram-261047375" target="_blank" class="text-white mx-3"><i class="fab fa-linkedin fa-lg"></i></a>
+                <a href="https://github.com/RAM524192" target="_blank" class="text-white mx-3"><i class="fab fa-github fa-lg"></i></a>
+            </div>
+            <p class="mb-0">© 2023 RAJESH RAM. ALL RIGHTS RESERVED.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- GSAP for advanced animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.4/ScrollTrigger.min.js"></script>
+    <!-- Custom JS -->
+    <script>
+        // Speech Synthesis
+        const synth = window.speechSynthesis;
+        
+        // AI Assistant Functionality
+        const assistant = document.getElementById('ai-assistant');
+        const chatContainer = document.getElementById('ai-chat-container');
+        const closeChat = document.getElementById('ai-close-chat');
+        const chatBody = document.getElementById('ai-chat-body');
+        const userInput = document.getElementById('ai-user-input');
+        
+        // Enhanced responses with your CV content
+        const responses = {
+            greet: [
+                "Hello! I'm Rajesh's AI assistant. Welcome to his portfolio showcasing his skills in Data Science and Full Stack Development. How can I help you?",
+                "Hi there! I can tell you about Rajesh's technical skills, projects, education and professional experience. What would you like to know?",
+                "Greetings! I'm here to help you explore Rajesh Ram's professional portfolio. He's a Computer Science graduate specializing in Data Science. What interests you?"
+            ],
+            about: [
+                "Rajesh is a detail-oriented Computer Science graduate with specialization in Data Science from Brainware University. He has strong foundations in programming, data-driven solutions, and machine learning.",
+                "With expertise in both Data Science and Full Stack Development, Rajesh creates comprehensive digital solutions. He ranked among the top 25% of his university batch.",
+                "Rajesh combines technical skills in programming and data analysis with soft skills like problem-solving and team collaboration."
+            ],
+            skills: [
+                "Rajesh's technical skills include Python (Basics), Java (Moderate), JavaScript, HTML/CSS, Bootstrap, React.js (Basics), Node.js, and various data science tools like NumPy and scikit-learn.",
+                "He's proficient in both frontend and backend development, with experience in databases like MySQL, MongoDB and Firebase.",
+                "Rajesh has completed certifications in Web Development and React, complementing his formal education in Computer Science with Data Science specialization."
+            ],
+            projects: [
+                "Rajesh has developed several projects including an E-Commerce website with product filtering and a Weather Application using API integration.",
+                "His projects demonstrate skills in web technologies like HTML5, CSS3, JavaScript, Bootstrap as well as API integration and data visualization.",
+                "He has also completed 20+ mini projects showcasing his problem-solving abilities across various domains."
+            ],
+            education: [
+                "Rajesh is pursuing his Bachelor of Technology in Computer Science & Engineering with Data Science specialization at Brainware University (2022-2026).",
+                "He ranked among the top 25% of his batch and has completed additional certifications in Web Development and React.",
+                "His coursework includes Data Science, Machine Learning, Web Technologies, Data Structures & Algorithms, and Database Management Systems."
+            ],
+            experience: [
+                "Rajesh has volunteer experience organizing an international conference on research engineering (ICCRET) where he led a team of 10+ volunteers.",
+                "He also coordinated a college technical exhibition with 15+ project displays, managing teams and operations.",
+                "These experiences demonstrate Rajesh's leadership, organizational, and team management skills alongside his technical capabilities."
+            ],
+            contact: [
+                "You can contact Rajesh via email at ram768154@gmail.com or phone at +91-6290524192. He's open to new opportunities and collaborations.",
+                "Rajesh welcomes professional inquiries. Connect with him on LinkedIn or view his projects on GitHub using the links in the contact section.",
+                "For job opportunities or project collaborations, please use the contact form or Rajesh's direct contact information provided."
+            ],
+            resume: [
+                "You can download Rajesh's resume in multiple formats including PDF, DOCX, and TXT from the resume download section.",
+                "The PDF version is recommended for Applicant Tracking Systems, while the DOCX version is editable if needed.",
+                "Rajesh's resume includes his education, skills, projects, and professional experience in a well-formatted document."
+            ],
+            portfolio: [
+                "Rajesh's portfolio includes his LinkedIn profile and GitHub repository where you can explore his projects and connect with him professionally.",
+                "You can find Rajesh's professional network on LinkedIn and his code repositories on GitHub through the portfolio section.",
+                "Check out Rajesh's LinkedIn for professional connections and GitHub to explore his coding projects and contributions."
+            ],
+            default: [
+                "I'm not sure I understand. Could you try asking about Rajesh's skills, projects, or experience?",
+                "I'm still learning! Try asking about Rajesh's technical skills or educational background.",
+                "I don't have an answer for that. Maybe ask about Rajesh's Data Science specialization or Full Stack projects?"
+            ]
+        };
+        
+        // Toggle chat window
+        assistant.addEventListener('click', () => {
+            chatContainer.classList.toggle('active');
+            if (chatContainer.classList.contains('active')) {
+                const greeting = randomResponse(responses.greet);
+                addMessage(greeting, 'ai');
+                speak(greeting);
+                userInput.focus();
+            }
+        });
+        
+        closeChat.addEventListener('click', () => {
+            chatContainer.classList.remove('active');
+        });
+        
+        // Handle user input
+        userInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && userInput.value.trim() !== '') {
+                const userMessage = userInput.value.trim();
+                addMessage(userMessage, 'user');
+                userInput.value = '';
+                
+                // Process input and generate response
+                setTimeout(() => {
+                    const aiResponse = generateResponse(userMessage.toLowerCase());
+                    addMessage(aiResponse, 'ai');
+                    speak(aiResponse);
+                }, 500);
+            }
+        });
+        
+        // Add message to chat
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('ai-message', sender);
+            messageDiv.innerHTML = `<p>${text}</p>`;
+            chatBody.appendChild(messageDiv);
+            chatBody.scrollTop = chatBody.scrollHeight;
+        }
+        
+        // Generate AI response
+        function generateResponse(input) {
+            if (input.includes('hi') || input.includes('hello') || input.includes('hey')) {
+                return randomResponse(responses.greet);
+            } else if (input.includes('about') || input.includes('who') || input.includes('background')) {
+                return randomResponse(responses.about);
+            } else if (input.includes('skill') || input.includes('tech') || input.includes('programming')) {
+                return randomResponse(responses.skills);
+            } else if (input.includes('project') || input.includes('work') || input.includes('portfolio')) {
+                return randomResponse(responses.projects);
+            } else if (input.includes('education') || input.includes('degree') || input.includes('university') || input.includes('certification')) {
+                return randomResponse(responses.education);
+            } else if (input.includes('experience') || input.includes('job') || input.includes('work history') || input.includes('volunteer')) {
+                return randomResponse(responses.experience);
+            } else if (input.includes('contact') || input.includes('email') || input.includes('phone') || input.includes('connect') || input.includes('hire')) {
+                return randomResponse(responses.contact);
+            } else if (input.includes('resume') || input.includes('cv') || input.includes('download')) {
+                return randomResponse(responses.resume);
+            } else if (input.includes('linkedin') || input.includes('github') || input.includes('profile')) {
+                return randomResponse(responses.portfolio);
+            } else {
+                return randomResponse(responses.default);
+            }
+        }
+        
+        // Get random response from array
+        function randomResponse(array) {
+            return array[Math.floor(Math.random() * array.length)];
+        }
+        
+        // Text-to-speech function
+        function speak(text) {
+            if (synth.speaking) {
+                synth.cancel();
+            }
+            
+            const utterance = new SpeechSynthesisUtterance(text);
+            const voices = synth.getVoices();
+            // Prefer a natural-sounding voice if available
+            const preferredVoice = voices.find(voice => 
+                voice.name.includes('Google UK English Male') || 
+                voice.name.includes('Microsoft David') ||
+                voice.name.includes('alexa')
+            );
+            
+            utterance.voice = preferredVoice || voices[0];
+            utterance.rate = 0.9;
+            utterance.pitch = 0.8;
+            synth.speak(utterance);
+        }
+        
+        // Interactive elements that trigger AI responses
+        document.querySelectorAll('[data-ai-trigger]').forEach(element => {
+            element.addEventListener('click', function() {
+                const triggerType = this.getAttribute('data-ai-trigger');
+                
+                // Open chat if it's closed
+                if (!chatContainer.classList.contains('active')) {
+                    chatContainer.classList.add('active');
+                }
+                
+                // Small delay to allow chat to open
+                setTimeout(() => {
+                    let response;
+                    
+                    // Check if we have a specific response for this trigger
+                    if (responses[triggerType]) {
+                        response = randomResponse(responses[triggerType]);
+                    } else {
+                        // Default to general category if specific response not found
+                        if (triggerType.includes('ecommerce') || triggerType.includes('weatherapp') || triggerType.includes('miniprojects')) {
+                            response = randomResponse(responses.projects);
+                        } else if (triggerType.includes('programming') || triggerType.includes('webdev') || triggerType.includes('datascience') || triggerType.includes('databases') || triggerType.includes('tools')) {
+                            response = randomResponse(responses.skills);
+                        } else if (triggerType.includes('btech') || triggerType.includes('cert1') || triggerType.includes('cert2')) {
+                            response = randomResponse(responses.education);
+                        } else if (triggerType.includes('iccret') || triggerType.includes('exhibition')) {
+                            response = randomResponse(responses.experience);
+                        } else if (triggerType.includes('contact')) {
+                            response = randomResponse(responses.contact);
+                        } else {
+                            response = "Thanks for your interest in this section of Rajesh's portfolio. How can I help you?";
+                        }
+                    }
+                    
+                    addMessage(response, 'ai');
+                    speak(response);
+                    userInput.focus();
+                }, 300);
+            });
+        });
+        
+        // Initialize voice synthesis when the page loads
+        window.addEventListener('load', function() {
+            // Some browsers need voices to be loaded
+            if (speechSynthesis.onvoiceschanged !== undefined) {
+                speechSynthesis.onvoiceschanged = function() {
+                    // Voices are now loaded
+                };
+            }
+        });
+        
+        // Navbar background change on scroll
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+        
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Initialize GSAP animations
+        gsap.registerPlugin(ScrollTrigger);
+        
+        // Animate elements on scroll
+        gsap.utils.toArray('.glass-card').forEach((card, i) => {
+            gsap.from(card, {
+                scrollTrigger: {
+                    trigger: card,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                },
+                opacity: 0,
+                y: 50,
+                duration: 0.8,
+                delay: i * 0.1
+            });
+        });
+        
+        // Floating orbs animation
+        gsap.to(".orb-1", {
+            duration: 20,
+            x: 100,
+            y: 100,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+        
+        gsap.to(".orb-2", {
+            duration: 25,
+            x: -150,
+            y: -150,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+        
+        gsap.to(".orb-3", {
+            duration: 15,
+            x: -100,
+            y: 100,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut",
+            delay: 2
+        });
+        
+        // Hero text animation
+        gsap.from(".hero-content h1", {
+            duration: 1.5,
+            opacity: 0,
+            y: -50,
+            ease: "power3.out"
+        });
+        
+        gsap.from(".hero-content p", {
+            duration: 1.5,
+            opacity: 0,
+            y: 50,
+            delay: 0.5,
+            ease: "power3.out"
+        });
+        
+        gsap.from(".hero-content .btn", {
+            duration: 1,
+            opacity: 0,
+            y: 30,
+            delay: 1,
+            stagger: 0.2,
+            ease: "back.out"
+        });
+        
+        // Section title animations
+        gsap.utils.toArray('.section-title').forEach(title => {
+            gsap.from(title, {
+                scrollTrigger: {
+                    trigger: title,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                },
+                opacity: 0,
+                x: -50,
+                duration: 0.8
+            });
+            
+            gsap.from(title.querySelector('::after'), {
+                scrollTrigger: {
+                    trigger: title,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                },
+                scaleX: 0,
+                duration: 1.5,
+                ease: "power3.out"
+            });
+        });
+        
+        // Timeline animations
+        gsap.utils.toArray('.timeline-item').forEach((item, i) => {
+            gsap.from(item, {
+                scrollTrigger: {
+                    trigger: item,
+                    start: "top 80%",
+                    toggleActions: "play none none none"
+                },
+                opacity: 0,
+                x: -30,
+                duration: 0.8,
+                delay: i * 0.2
+            });
+        });
+        
+        // Profile photo animation
+        gsap.from(".profile-photo", {
+            scrollTrigger: {
+                trigger: "#about",
+                start: "top 80%",
+                toggleActions: "play none none none"
+            },
+            opacity: 0,
+            scale: 0.9,
+            duration: 1,
+            ease: "back.out(1.7)"
+        });
+    </script>
+</body>
+</html>
